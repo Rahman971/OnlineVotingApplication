@@ -1,0 +1,212 @@
+﻿@model IEnumerable<OnlineVotingApplication.Models.Election>
+
+@{
+    ViewData["Title"] = "Available Elections";
+}
+
+<div class="elections-page">
+
+    <div class="elections-container">
+
+        <!-- Page Header -->
+        <div class="elections-page-header">
+
+            <div>
+                <span class="elections-eyebrow">
+                    STUDENT VOTING PORTAL
+                </span>
+
+                <h1>Available Elections</h1>
+
+                <p>
+                    Choose an active election to view candidates and cast your vote.
+                </p>
+            </div>
+
+            <div class="elections-header-icon">
+                🗳️
+            </div>
+
+        </div>
+
+
+        <!-- Login Notice -->
+        @if (Context.Session.GetInt32("StudentId") == null)
+        {
+            <div class="elections-login-notice">
+
+                <span>🔐</span>
+
+                <div>
+                    <strong>Student login required</strong>
+
+                    <p>
+                        Please login with your student account before voting.
+                    </p>
+                </div>
+
+                <a asp-controller="Student"
+                   asp-action="Login"
+                   class="elections-login-button">
+                    Student Login
+                </a>
+
+            </div>
+        }
+
+
+        <!-- Elections -->
+        @if (Model != null && Model.Any())
+        {
+            <div class="elections-section-title">
+
+                <h2>Active Elections</h2>
+
+                <span>
+                    @Model.Count() election(s) available
+                </span>
+
+            </div>
+
+
+            <div class="elections-grid">
+
+                @foreach (var election in Model)
+                {
+                    <div class="election-card">
+
+                        <div class="election-card-top">
+
+                            <span class="election-live-badge">
+                                ● LIVE
+                            </span>
+
+                            <span class="election-lock">
+                                🔒
+                            </span>
+
+                        </div>
+
+
+                        <h2>
+                            @election.ElectionName
+                        </h2>
+
+
+                        @if (!string.IsNullOrWhiteSpace(election.Description))
+                        {
+                            <p class="election-description">
+                                @election.Description
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="election-description">
+                                Participate in this college election
+                                and make your voice count.
+                            </p>
+                        }
+
+
+                        <div class="election-dates">
+
+                            <div class="election-date-item">
+
+                                <span>STARTS</span>
+
+                                <strong>
+                                    @election.StartDate.ToString("dd MMM yyyy")
+                                </strong>
+
+                                <small>
+                                    @election.StartDate.ToString("hh:mm tt")
+                                </small>
+
+                            </div>
+
+
+                            <div class="election-date-line"></div>
+
+
+                            <div class="election-date-item">
+
+                                <span>ENDS</span>
+
+                                <strong>
+                                    @election.EndDate.ToString("dd MMM yyyy")
+                                </strong>
+
+                                <small>
+                                    @election.EndDate.ToString("hh:mm tt")
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <a asp-controller="Election"
+                           asp-action="Details"
+                           asp-route-id="@election.Id"
+                           class="view-election-button">
+
+                            View Election
+
+                            <span>→</span>
+
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+
+            <div class="elections-empty-state">
+
+                <div class="empty-election-icon">
+                    🗳️
+                </div>
+
+                <h2>No Active Elections</h2>
+
+                <p>
+                    There are currently no elections available for voting.
+                    Please check again later.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="empty-home-button">
+                    Back to Home
+                </a>
+
+            </div>
+        }
+
+
+        <!-- Security Information -->
+        <div class="elections-security-section">
+
+            <div class="security-section-icon">
+                🔐
+            </div>
+
+            <div>
+                <h3>Secure Online Voting</h3>
+
+                <p>
+                    Each student can vote only once in an election.
+                    Review your candidate selection carefully before
+                    submitting your vote.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

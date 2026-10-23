@@ -1,0 +1,192 @@
+﻿@model OnlineVotingApplication.Models.Election
+
+@{
+    ViewData["Title"] = "Edit Election";
+}
+
+<div class="election-create-page">
+
+    <div class="election-create-container">
+
+        <!-- HEADER -->
+        <div class="election-create-header">
+
+            <div>
+                <span class="election-page-label">
+                    ADMIN PANEL
+                </span>
+
+                <h1>Edit Election</h1>
+
+                <p>
+                    Update the election information.
+                </p>
+            </div>
+
+            <a asp-controller="AdminElection"
+               asp-action="Index"
+               class="election-back-btn">
+                ← Elections
+            </a>
+
+        </div>
+
+        <!-- FORM CARD -->
+        <div class="election-form-card">
+
+            <div class="election-form-heading">
+
+                <div class="election-form-icon">
+                    ✏️
+                </div>
+
+                <div>
+                    <h2>Election Information</h2>
+
+                    <p>
+                        Update the details of this election.
+                    </p>
+                </div>
+
+            </div>
+
+            <form asp-controller="AdminElection"
+                  asp-action="Edit"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-summary">
+                </div>
+
+                <!-- ELECTION NAME -->
+                <div class="election-form-group">
+
+                    <label asp-for="ElectionName">
+                        Election Name
+                    </label>
+
+                    <input asp-for="ElectionName"
+                           autocomplete="off" />
+
+                    <span asp-validation-for="ElectionName"
+                          class="validation-message">
+                    </span>
+
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="election-form-group">
+
+                    <label asp-for="Description">
+                        Description
+                    </label>
+
+                    <textarea asp-for="Description"
+                              rows="4"
+                              placeholder="Enter election description..."></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="validation-message">
+                    </span>
+
+                </div>
+
+                <!-- DATE ROW -->
+                <div class="election-form-row">
+
+                    <div class="election-form-group">
+
+                        <label asp-for="StartDate">
+                            Start Date & Time
+                        </label>
+
+                        <input asp-for="StartDate"
+                               type="datetime-local" />
+
+                        <span asp-validation-for="StartDate"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+
+                    <div class="election-form-group">
+
+                        <label asp-for="EndDate">
+                            End Date & Time
+                        </label>
+
+                        <input asp-for="EndDate"
+                               type="datetime-local" />
+
+                        <span asp-validation-for="EndDate"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- CURRENT STATUS -->
+                <div class="election-current-status">
+
+                    <span class="status-title">
+                        Current Status
+                    </span>
+
+                    @if (Model.IsActive)
+                    {
+                        <span class="election-status active">
+                            ● Active
+                        </span>
+
+                        <p>
+                            This election is currently active.
+                            Use Election Management to stop it.
+                        </p>
+                    }
+                    else
+                    {
+                        <span class="election-status inactive">
+                            ● Inactive
+                        </span>
+
+                        <p>
+                            This election is currently inactive.
+                            You can start it from Election Management.
+                        </p>
+                    }
+
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="election-form-actions">
+
+                    <a asp-controller="AdminElection"
+                       asp-action="Index"
+                       class="election-cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="election-save-btn">
+                        Save Changes →
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,695 @@
+﻿@model List<OnlineVotingApplication.Models.Student>
+
+@{
+    ViewData["Title"] = "Student Management";
+}
+
+<div class="student-management-page">
+
+    <div class="student-management-container">
+
+        <!-- HEADER -->
+        <div class="student-management-header">
+
+            <div>
+                <span class="student-management-eyebrow">
+                    ADMINISTRATION
+                </span>
+
+                <h1>Student Management</h1>
+
+                <p>
+                    Manage college student accounts and voting access.
+                </p>
+            </div>
+
+            <a asp-controller="Admin"
+               asp-action="Dashboard"
+               class="student-dashboard-link">
+                ← Dashboard
+            </a>
+
+        </div>
+
+
+        <!-- SUCCESS MESSAGE -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="student-management-message success">
+
+                <span>✓</span>
+
+                <div>
+                    <strong>Success</strong>
+                    <p>@TempData["Success"]</p>
+                </div>
+
+            </div>
+        }
+
+
+        <!-- ERROR MESSAGE -->
+        @if (TempData["Error"] != null)
+        {
+            <div class="student-management-message error">
+
+                <span>!</span>
+
+                <div>
+                    <strong>Action blocked</strong>
+                    <p>@TempData["Error"]</p>
+                </div>
+
+            </div>
+        }
+
+
+        <!-- SEARCH + ACTIONS -->
+        <div class="student-management-actions">
+
+            <!-- SEARCH -->
+            <div class="student-search-box">
+
+                <span class="student-search-icon">
+                    🔍
+                </span>
+
+                <input type="search"
+                       id="studentSearch"
+                       placeholder="Search student name, ID, email or department..."
+                       autocomplete="off" />
+
+                <button type="button"
+                        id="clearStudentSearch"
+                        class="student-search-clear"
+                        aria-label="Clear search">
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+            <div class="student-action-buttons">
+
+                <form asp-controller="Admin"
+                      asp-action="ImportCollegeStudents"
+                      method="post"
+                      class="student-inline-form">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="student-import-button"
+                            onclick="return confirm('Add the prepared college student accounts? Existing Student IDs and emails will be skipped.');">
+
+                        <span>↓</span>
+                        Import College Students
+
+                    </button>
+
+                </form>
+
+
+                <a asp-controller="Admin"
+                   asp-action="AddStudent"
+                   class="student-add-button">
+
+                    <span>+</span>
+                    Add Student
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+        <div class="student-management-summary">
+
+            <!-- TOTAL -->
+            <div class="student-summary-card">
+
+                <div class="student-summary-icon">
+                    👥
+                </div>
+
+                <div>
+                    <span>Total Students</span>
+
+                    <strong>
+                        @Model.Count
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <!-- ACTIVE -->
+            <div class="student-summary-card active-card">
+
+                <div class="student-summary-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <span>Active</span>
+
+                    <strong>
+                        @Model.Count(s => s.IsActive)
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <!-- INACTIVE -->
+            <div class="student-summary-card inactive-card">
+
+                <div class="student-summary-icon">
+                    !
+                </div>
+
+                <div>
+                    <span>Inactive</span>
+
+                    <strong>
+                        @Model.Count(s => !s.IsActive)
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STUDENT CARD -->
+        <div class="student-management-card">
+
+
+            <!-- CARD HEADER -->
+            <div class="student-management-card-header">
+
+                <div>
+
+                    <span class="student-management-eyebrow">
+                        REGISTERED STUDENTS
+                    </span>
+
+                    <h2>
+                        Student Accounts
+                    </h2>
+
+                    <p>
+                        College students registered for digital elections.
+                    </p>
+
+                </div>
+
+
+                <div class="student-record-count">
+                    @Model.Count record@(Model.Count == 1 ? "" : "s")
+                </div>
+
+            </div>
+
+
+            @if (Model.Any())
+            {
+
+                <!-- TABLE -->
+                <div class="student-table-wrapper">
+
+                    <table class="student-management-table"
+                           id="studentTable">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Student
+                                </th>
+
+                                <th>
+                                    Student ID
+                                </th>
+
+                                <th>
+                                    Contact
+                                </th>
+
+                                <th>
+                                    Academic
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Registered
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var student in Model)
+                            {
+
+                                <tr class="student-table-row">
+
+
+                                    <!-- STUDENT -->
+                                    <td>
+
+                                        <div class="student-person">
+
+                                            <!-- SIMPLE FIXED AVATAR -->
+                                            <div class="student-avatar">
+                                                ST
+                                            </div>
+
+
+                                            <div class="student-person-details">
+
+                                                <strong class="student-person-name">
+                                                    @student.FullName
+                                                </strong>
+
+                                                <small>
+                                                    @student.Department
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- STUDENT ID -->
+                                    <td>
+
+                                        <span class="student-id-badge">
+                                            @student.StudentId
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- CONTACT -->
+                                    <td>
+
+                                        <div class="student-contact">
+
+                                            <span>
+                                                @student.Email
+                                            </span>
+
+                                            <small>
+                                                @student.PhoneNumber
+                                            </small>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- ACADEMIC -->
+                                    <td>
+
+                                        <div class="student-academic">
+
+                                            <strong>
+                                                @student.Department
+                                            </strong>
+
+                                            <small>
+                                                @student.Year Year
+                                            </small>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+                                    <td>
+
+                                        @if (student.IsActive)
+                                        {
+                                            <span class="student-status active">
+
+                                                <i></i>
+
+                                                ACTIVE
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="student-status inactive">
+
+                                                <i></i>
+
+                                                INACTIVE
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- REGISTERED -->
+                                    <td>
+
+                                        <span class="student-created-date">
+
+                                            @student.CreatedAt.ToString("dd MMM yyyy")
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- ACTIONS -->
+                                    <td>
+
+                                        <div class="student-row-actions">
+
+
+                                            <!-- EDIT -->
+                                            <a asp-controller="Admin"
+                                               asp-action="EditStudent"
+                                               asp-route-id="@student.Id"
+                                               class="student-edit-button"
+                                               title="Edit student">
+
+                                                Edit
+
+                                            </a>
+
+
+                                            <!-- STATUS -->
+                                            <form asp-controller="Admin"
+                                                  asp-action="ToggleStudentStatus"
+                                                  method="post"
+                                                  class="student-inline-form">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@student.Id" />
+
+                                                @if (student.IsActive)
+                                                {
+                                                    <button type="submit"
+                                                            class="student-status-button deactivate"
+                                                            title="Deactivate student">
+
+                                                        Deactivate
+
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit"
+                                                            class="student-status-button activate"
+                                                            title="Activate student">
+
+                                                        Activate
+
+                                                    </button>
+                                                }
+
+                                            </form>
+
+
+                                            <!-- DELETE -->
+                                            <form asp-controller="Admin"
+                                                  asp-action="DeleteStudent"
+                                                  method="post"
+                                                  class="student-inline-form">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@student.Id" />
+
+                                                <button type="submit"
+                                                        class="student-delete-button"
+                                                        title="Delete student"
+                                                        onclick="return confirm('Are you sure you want to delete this student account?');">
+
+                                                    Delete
+
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- NO SEARCH RESULTS -->
+                <div id="noStudentSearchResult"
+                     class="student-search-empty"
+                     style="display:none;">
+
+                    <div>
+                        🔍
+                    </div>
+
+                    <h3>
+                        No students found
+                    </h3>
+
+                    <p>
+                        Try another name, Student ID, email or department.
+                    </p>
+
+                </div>
+
+            }
+            else
+            {
+
+                <!-- EMPTY -->
+                <div class="student-management-empty">
+
+                    <div class="student-empty-icon">
+                        👥
+                    </div>
+
+                    <h2>
+                        No Students Registered
+                    </h2>
+
+                    <p>
+                        Add a student manually or import the prepared
+                        college student accounts.
+                    </p>
+
+
+                    <div class="student-empty-actions">
+
+
+                        <!-- IMPORT -->
+                        <form asp-controller="Admin"
+                              asp-action="ImportCollegeStudents"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="student-import-button"
+                                    onclick="return confirm('Import the prepared college student accounts?');">
+
+                                ↓ Import College Students
+
+                            </button>
+
+                        </form>
+
+
+                        <!-- ADD -->
+                        <a asp-controller="Admin"
+                           asp-action="AddStudent"
+                           class="student-add-button">
+
+                            + Add Student
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+
+        <!-- SECURITY -->
+        <div class="student-management-security">
+
+            <div class="student-security-icon">
+                🔒
+            </div>
+
+            <div>
+
+                <strong>
+                    Student Account Security
+                </strong>
+
+                <p>
+                    Student passwords are stored using secure password
+                    hashing. Deactivated accounts cannot access the
+                    voting system.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     STUDENT SEARCH JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput =
+            document.getElementById("studentSearch");
+
+        const table =
+            document.getElementById("studentTable");
+
+        const noResult =
+            document.getElementById("noStudentSearchResult");
+
+        const clearButton =
+            document.getElementById("clearStudentSearch");
+
+
+        if (!searchInput || !table) {
+            return;
+        }
+
+
+        const rows =
+            table.querySelectorAll("tbody tr");
+
+
+        function filterStudents() {
+
+            const search =
+                searchInput.value
+                    .toLowerCase()
+                    .trim();
+
+
+            let visibleRows = 0;
+
+
+            rows.forEach(function (row) {
+
+                const studentText =
+                    row.textContent
+                        .toLowerCase();
+
+
+                if (studentText.includes(search)) {
+
+                    row.style.display = "";
+
+                    visibleRows++;
+
+                }
+                else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+
+            if (noResult) {
+
+                noResult.style.display =
+                    visibleRows === 0
+                        ? "block"
+                        : "none";
+
+            }
+
+
+            if (clearButton) {
+
+                clearButton.style.display =
+                    search.length > 0
+                        ? "flex"
+                        : "none";
+
+            }
+
+        }
+
+
+        searchInput.addEventListener(
+            "input",
+            filterStudents
+        );
+
+
+        if (clearButton) {
+
+            clearButton.addEventListener(
+                "click",
+                function () {
+
+                    searchInput.value = "";
+
+                    filterStudents();
+
+                    searchInput.focus();
+
+                }
+            );
+
+        }
+
+    });
+
+</script>

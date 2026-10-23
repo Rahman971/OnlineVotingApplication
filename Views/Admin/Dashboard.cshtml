@@ -1,0 +1,956 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+
+    int totalStudents = ViewBag.TotalStudents ?? 0;
+    int activeStudents = ViewBag.ActiveStudents ?? 0;
+    int totalCandidates = ViewBag.TotalCandidates ?? 0;
+    int totalElections = ViewBag.TotalElections ?? 0;
+    int activeElections = ViewBag.ActiveElections ?? 0;
+    int totalVotes = ViewBag.TotalVotes ?? 0;
+    int pendingApplications = ViewBag.PendingApplications ?? 0;
+
+    int inactiveStudents = totalStudents - activeStudents;
+}
+
+<div class="admin-dashboard-page">
+
+    <div class="admin-dashboard-container">
+
+        <!-- =====================================================
+             DASHBOARD HEADER
+        ====================================================== -->
+
+        <div class="admin-dashboard-header">
+
+            <div>
+
+                <span class="admin-dashboard-eyebrow">
+                    ADMINISTRATION PORTAL
+                </span>
+
+                <h1>
+                    Admin Dashboard
+                </h1>
+
+                <p>
+                    Welcome to the Online Voting System administration panel.
+                    Manage your college elections from one place.
+                </p>
+
+            </div>
+
+            <div class="admin-dashboard-header-actions">
+
+                <div class="admin-dashboard-date">
+
+                    <span>Today</span>
+
+                    <strong>
+                        @DateTime.Now.ToString("dd MMM yyyy")
+                    </strong>
+
+                </div>
+
+                <div class="admin-dashboard-icon">
+                    ⚙️
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SUCCESS / ERROR MESSAGES
+        ====================================================== -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="dashboard-message dashboard-success">
+                <span>✓</span>
+                <div>
+                    @TempData["Success"]
+                </div>
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="dashboard-message dashboard-error">
+                <span>!</span>
+                <div>
+                    @TempData["Error"]
+                </div>
+            </div>
+        }
+
+
+        <!-- =====================================================
+             SYSTEM OVERVIEW
+        ====================================================== -->
+
+        <div class="admin-dashboard-section-title">
+
+            <span>
+                SYSTEM OVERVIEW
+            </span>
+
+            <h2>
+                Election Statistics
+            </h2>
+
+        </div>
+
+
+        <div class="admin-stats-grid">
+
+
+            <!-- STUDENTS -->
+
+            <div class="admin-stat-card">
+
+                <div class="admin-stat-icon">
+                    🎓
+                </div>
+
+                <div class="admin-stat-content">
+
+                    <span>
+                        Total Students
+                    </span>
+
+                    <strong>
+                        @totalStudents
+                    </strong>
+
+                    <small>
+                        Registered accounts
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIVE STUDENTS -->
+
+            <div class="admin-stat-card">
+
+                <div class="admin-stat-icon">
+                    ✓
+                </div>
+
+                <div class="admin-stat-content">
+
+                    <span>
+                        Active Students
+                    </span>
+
+                    <strong>
+                        @activeStudents
+                    </strong>
+
+                    <small>
+                        Eligible accounts
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- CANDIDATES -->
+
+            <div class="admin-stat-card">
+
+                <div class="admin-stat-icon">
+                    👤
+                </div>
+
+                <div class="admin-stat-content">
+
+                    <span>
+                        Total Candidates
+                    </span>
+
+                    <strong>
+                        @totalCandidates
+                    </strong>
+
+                    <small>
+                        Approved candidate profiles
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- VOTES -->
+
+            <div class="admin-stat-card">
+
+                <div class="admin-stat-icon">
+                    🗳️
+                </div>
+
+                <div class="admin-stat-content">
+
+                    <span>
+                        Total Votes
+                    </span>
+
+                    <strong>
+                        @totalVotes
+                    </strong>
+
+                    <small>
+                        Votes recorded
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             CANDIDATE APPLICATIONS
+        ====================================================== -->
+
+        <div class="candidate-application-dashboard-card">
+
+            <div class="candidate-application-dashboard-icon">
+                📝
+            </div>
+
+            <div class="candidate-application-dashboard-content">
+
+                <span>
+                    CANDIDATE MANAGEMENT
+                </span>
+
+                <h2>
+                    Candidate Applications
+                </h2>
+
+                <p>
+                    Review student applications and approve or reject
+                    candidates before they appear in the election.
+                </p>
+
+                <a asp-controller="Admin"
+                   asp-action="CandidateApplications"
+                   class="candidate-application-dashboard-button">
+
+                    Review Applications
+
+                    <span>
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+            <div class="candidate-pending-count">
+
+                <strong>
+                    @pendingApplications
+                </strong>
+
+                <span>
+                    Pending
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             MAIN MANAGEMENT
+        ====================================================== -->
+
+        <div class="admin-management-card">
+
+            <div class="admin-section-header">
+
+                <div>
+
+                    <span class="admin-section-eyebrow">
+                        SYSTEM MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Manage Voting System
+                    </h2>
+
+                    <p>
+                        Access and manage the main election modules.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-management-grid">
+
+
+                <!-- STUDENTS -->
+
+                <a asp-controller="Admin"
+                   asp-action="Students"
+                   class="admin-management-item">
+
+                    <div class="admin-management-icon">
+                        🎓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Students
+                        </strong>
+
+                        <span>
+                            View and manage registered student accounts
+                        </span>
+
+                    </div>
+
+                    <b>
+                        →
+                    </b>
+
+                </a>
+
+
+                <!-- CANDIDATE APPLICATIONS -->
+
+                <a asp-controller="Admin"
+                   asp-action="CandidateApplications"
+                   class="admin-management-item candidate-management-item">
+
+                    <div class="admin-management-icon">
+                        📝
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Candidate Applications
+                        </strong>
+
+                        <span>
+                            Review, approve or reject student applications
+                        </span>
+
+                    </div>
+
+                    <div class="application-menu-badge">
+                        @pendingApplications
+                    </div>
+
+                    <b>
+                        →
+                    </b>
+
+                </a>
+
+
+                <!-- CANDIDATES -->
+
+                <a asp-controller="Candidate"
+                   asp-action="Index"
+                   class="admin-management-item">
+
+                    <div class="admin-management-icon">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Candidates
+                        </strong>
+
+                        <span>
+                            View approved election candidates
+                        </span>
+
+                    </div>
+
+                    <b>
+                        →
+                    </b>
+
+                </a>
+
+
+                <!-- ELECTIONS -->
+
+                <a asp-controller="AdminElection"
+                   asp-action="Index"
+                   class="admin-management-item">
+
+                    <div class="admin-management-icon">
+                        🗳️
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Elections
+                        </strong>
+
+                        <span>
+                            Create, start, stop and manage elections
+                        </span>
+
+                    </div>
+
+                    <b>
+                        →
+                    </b>
+
+                </a>
+
+
+                <!-- RESULTS -->
+
+                <a asp-controller="AdminResults"
+                   asp-action="Index"
+                   class="admin-management-item">
+
+                    <div class="admin-management-icon">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Results
+                        </strong>
+
+                        <span>
+                            View election results and vote statistics
+                        </span>
+
+                    </div>
+
+                    <b>
+                        →
+                    </b>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             QUICK ACTIONS
+        ====================================================== -->
+
+        <div class="admin-quick-actions-card">
+
+            <div class="admin-section-header">
+
+                <div>
+
+                    <span class="admin-section-eyebrow">
+                        QUICK ACTIONS
+                    </span>
+
+                    <h2>
+                        Start Managing
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-quick-actions">
+
+
+                <!-- CREATE ELECTION -->
+
+                <a asp-controller="AdminElection"
+                   asp-action="Create"
+                   class="admin-quick-action">
+
+                    <span>
+                        ＋
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Create Election
+                        </strong>
+
+                        <small>
+                            Set up a new college election
+                        </small>
+
+                    </div>
+
+                </a>
+
+
+                <!-- CANDIDATE APPLICATIONS -->
+
+                <a asp-controller="Admin"
+                   asp-action="CandidateApplications"
+                   class="admin-quick-action">
+
+                    <span>
+                        📝
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Candidate Applications
+                        </strong>
+
+                        <small>
+                            Review pending candidate applications
+                        </small>
+
+                    </div>
+
+                </a>
+
+
+                <!-- STUDENTS -->
+
+                <a asp-controller="Admin"
+                   asp-action="Students"
+                   class="admin-quick-action">
+
+                    <span>
+                        👥
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Student Accounts
+                        </strong>
+
+                        <small>
+                            Review registered students
+                        </small>
+
+                    </div>
+
+                </a>
+
+
+                <!-- RESULTS -->
+
+                <a asp-controller="AdminResults"
+                   asp-action="Index"
+                   class="admin-quick-action">
+
+                    <span>
+                        📈
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            View Results
+                        </strong>
+
+                        <small>
+                            Monitor election results
+                        </small>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             ELECTION STATUS
+        ====================================================== -->
+
+        <div class="admin-status-layout">
+
+
+            <!-- STATUS -->
+
+            <div class="admin-status-card">
+
+                <div class="admin-status-icon">
+                    🗳️
+                </div>
+
+                <div class="admin-status-content">
+
+                    <span>
+                        ELECTION STATUS
+                    </span>
+
+                    <strong>
+                        @activeElections
+                        Active Election@(activeElections == 1 ? "" : "s")
+                    </strong>
+
+                    <p>
+                        @totalElections total election(s) have been created
+                        in the system.
+                    </p>
+
+                </div>
+
+                <a asp-controller="AdminElection"
+                   asp-action="Index"
+                   class="admin-status-button">
+
+                    Manage →
+
+                </a>
+
+            </div>
+
+
+            <!-- STUDENT STATUS -->
+
+            <div class="admin-status-card student-status">
+
+                <div class="admin-status-icon">
+                    👥
+                </div>
+
+                <div class="admin-status-content">
+
+                    <span>
+                        STUDENT ACCOUNTS
+                    </span>
+
+                    <strong>
+                        @activeStudents Active
+                    </strong>
+
+                    <p>
+                        @inactiveStudents inactive account@(inactiveStudents == 1 ? "" : "s")
+                        currently in the system.
+                    </p>
+
+                </div>
+
+                <a asp-controller="Admin"
+                   asp-action="Students"
+                   class="admin-status-button">
+
+                    Manage →
+
+                </a>
+
+            </div>
+
+
+            <!-- CANDIDATE APPLICATION STATUS -->
+
+            <div class="admin-status-card candidate-application-status">
+
+                <div class="admin-status-icon">
+                    📝
+                </div>
+
+                <div class="admin-status-content">
+
+                    <span>
+                        CANDIDATE APPLICATIONS
+                    </span>
+
+                    <strong>
+                        @pendingApplications Pending
+                    </strong>
+
+                    <p>
+                        Application@(pendingApplications == 1 ? "" : "s")
+                        waiting for administrator review.
+                    </p>
+
+                </div>
+
+                <a asp-controller="Admin"
+                   asp-action="CandidateApplications"
+                   class="admin-status-button">
+
+                    Review →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SECURITY NOTICE
+        ====================================================== -->
+
+        <div class="admin-security-notice">
+
+            <div class="admin-security-icon">
+                🔒
+            </div>
+
+            <div>
+
+                <strong>
+                    Administration Access
+                </strong>
+
+                <p>
+                    This dashboard is restricted to authorized
+                    administrators. Keep your administrator credentials
+                    secure and always log out after completing your work.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             LOGOUT
+        ====================================================== -->
+
+        <div class="admin-dashboard-footer">
+
+            <a asp-controller="Admin"
+               asp-action="Logout"
+               class="admin-logout-button">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* =========================================
+           DASHBOARD MESSAGES
+           ========================================= */
+
+    .dashboard-message {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+
+        .dashboard-message > span {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 800;
+        }
+
+    .dashboard-success {
+        background: #eaf8ef;
+        color: #176b3a;
+        border: 1px solid #bce8ca;
+    }
+
+    .dashboard-error {
+        background: #fff0f0;
+        color: #a52222;
+        border: 1px solid #f0c1c1;
+    }
+
+
+    /* =========================================
+           CANDIDATE APPLICATION DASHBOARD
+           ========================================= */
+
+    .candidate-application-dashboard-card {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        position: relative;
+        margin: 25px 0;
+        padding: 25px 28px;
+        background: linear-gradient( 135deg, #ffffff, #f5f9ff );
+        border: 1px solid #dce7f4;
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(20, 50, 90, .07);
+    }
+
+    .candidate-application-dashboard-icon {
+        width: 65px;
+        height: 65px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf2ff;
+        border-radius: 16px;
+        font-size: 30px;
+    }
+
+    .candidate-application-dashboard-content {
+        flex: 1;
+    }
+
+        .candidate-application-dashboard-content > span {
+            display: block;
+            margin-bottom: 5px;
+            color: #56718f;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .candidate-application-dashboard-content h2 {
+            margin: 0;
+            color: #102542;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .candidate-application-dashboard-content p {
+            margin: 7px 0 15px;
+            color: #718096;
+            font-size: 14px;
+        }
+
+    .candidate-application-dashboard-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 17px;
+        background: #123d73;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+        .candidate-application-dashboard-button:hover {
+            background: #0b2d58;
+        }
+
+    .candidate-pending-count {
+        min-width: 80px;
+        padding: 14px;
+        text-align: center;
+        background: #fff5d9;
+        border: 1px solid #f0dda1;
+        border-radius: 13px;
+    }
+
+        .candidate-pending-count strong {
+            display: block;
+            color: #936600;
+            font-size: 25px;
+        }
+
+        .candidate-pending-count span {
+            color: #9b771d;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+
+    /* =========================================
+           APPLICATION MANAGEMENT ITEM
+           ========================================= */
+
+    .candidate-management-item {
+        position: relative;
+    }
+
+    .application-menu-badge {
+        min-width: 27px;
+        height: 27px;
+        padding: 0 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff0cf;
+        color: #936600;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+
+    /* =========================================
+           CANDIDATE APPLICATION STATUS
+           ========================================= */
+
+    .candidate-application-status {
+        border-left: 4px solid #d19a22;
+    }
+
+
+    /* =========================================
+           MOBILE
+           ========================================= */
+
+    @@media (max-width: 700px) {
+
+        .candidate-application-dashboard-card {
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .candidate-application-dashboard-icon {
+            width: 52px;
+            height: 52px;
+            font-size: 24px;
+        }
+
+        .candidate-pending-count {
+            min-width: 65px;
+        }
+
+        .candidate-application-dashboard-content h2 {
+            font-size: 18px;
+        }
+    }
+
+    @@media (max-width: 500px) {
+
+        .candidate-application-dashboard-card {
+            flex-wrap: wrap;
+        }
+
+        .candidate-application-dashboard-content {
+            width: calc(100% - 75px);
+        }
+
+        .candidate-pending-count {
+            margin-left: 0;
+        }
+    }
+
+</style>

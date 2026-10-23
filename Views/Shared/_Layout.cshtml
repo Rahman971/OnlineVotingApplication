@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Online Voting System</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="main-navbar">
+
+        <div class="navbar-container">
+
+            <!-- COLLEGE BRAND -->
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="college-brand">
+
+                <div class="college-logo">
+                    <span>TC</span>
+                </div>
+
+                <div class="college-brand-text">
+
+                    <div class="college-title">
+                        THULASI COLLEGE OF ARTS AND SCIENCE
+                    </div>
+
+                    <div class="college-women">
+                        FOR WOMEN
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- PUBLIC NAVIGATION -->
+
+            <nav class="main-nav">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="nav-link-custom">
+                    Home
+                </a>
+
+                <a asp-controller="Election"
+                   asp-action="Index"
+                   class="nav-link-custom">
+                    Elections
+                </a>
+
+                <a asp-controller="Results"
+                   asp-action="Index"
+                   class="nav-link-custom">
+                    Results
+                </a>
+
+                <a asp-controller="Student"
+                   asp-action="Login"
+                   class="nav-link-custom">
+                    Student Login
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= PAGE CONTENT ================= -->
+
+    <main>
+        @RenderBody()
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="main-footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-brand">
+
+                <div class="footer-logo">
+                    TC
+                </div>
+
+                <div>
+
+                    <h3>
+                        THULASI COLLEGE OF ARTS AND SCIENCE
+                    </h3>
+
+                    <span>
+                        FOR WOMEN
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-description">
+
+                Online Voting System
+                <br />
+
+                Secure • Transparent • Digital Elections
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © @DateTime.Now.Year Thulasi College
+            </span>
+
+            <span>
+                All Rights Reserved.
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

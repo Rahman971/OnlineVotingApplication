@@ -1,0 +1,178 @@
+﻿@model OnlineVotingApplication.Models.Candidate
+
+@{
+    ViewData["Title"] = "Confirm Your Vote";
+    var election = ViewBag.Election as OnlineVotingApplication.Models.Election;
+}
+
+<div class="vote-confirm-page">
+
+    <div class="vote-confirm-container">
+
+        <!-- Back -->
+        <a asp-controller="Election"
+           asp-action="Details"
+           asp-route-id="@election?.Id"
+           class="vote-back-link">
+            ← Back to Candidates
+        </a>
+
+        <!-- Header -->
+        <div class="vote-confirm-header">
+            <div class="vote-secure-icon">
+                🔒
+            </div>
+
+            <h1>Confirm Your Vote</h1>
+
+            <p>
+                Please review your selection carefully before submitting.
+            </p>
+        </div>
+
+        <!-- Election Information -->
+        <div class="vote-election-info">
+
+            <span class="vote-label">
+                ELECTION
+            </span>
+
+            <h2>
+                @election?.ElectionName
+            </h2>
+
+            @if (!string.IsNullOrWhiteSpace(election?.Description))
+            {
+                <p>
+                    @election.Description
+                </p>
+            }
+
+        </div>
+
+        <!-- Candidate Card -->
+        <div class="selected-candidate-card">
+
+            <div class="candidate-photo-large">
+
+                @if (!string.IsNullOrWhiteSpace(Model.PhotoPath))
+                {
+                    <img src="@Model.PhotoPath"
+                         alt="@Model.FullName" />
+                }
+                else
+                {
+                    <div class="candidate-photo-placeholder">
+                        👤
+                    </div>
+                }
+
+            </div>
+
+            <div class="selected-candidate-details">
+
+                <span class="selected-label">
+                    YOUR SELECTED CANDIDATE
+                </span>
+
+                <h2>
+                    @Model.FullName
+                </h2>
+
+                <p>
+                    <strong>Candidate ID:</strong>
+                    @Model.CandidateId
+                </p>
+
+                <p>
+                    <strong>Department:</strong>
+                    @Model.Department
+                </p>
+
+                <p>
+                    <strong>Position:</strong>
+                    @Model.Position
+                </p>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Manifesto))
+                {
+                    <div class="candidate-manifesto">
+                        <strong>Manifesto</strong>
+                        <p>
+                            @Model.Manifesto
+                        </p>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <!-- Warning -->
+        <div class="vote-warning-box">
+            <span class="warning-icon">⚠</span>
+
+            <div>
+                <strong>Important</strong>
+
+                <p>
+                    Once your vote is submitted, it cannot be changed.
+                    Please make sure your selected candidate is correct.
+                </p>
+            </div>
+        </div>
+
+        <!-- Confirmation Form -->
+        <form asp-controller="Vote"
+              asp-action="Confirm"
+              method="post"
+              class="vote-confirm-form">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden"
+                   name="electionId"
+                   value="@election?.Id" />
+
+            <input type="hidden"
+                   name="candidateId"
+                   value="@Model.Id" />
+
+            <button type="submit"
+                    class="submit-vote-button">
+
+                <span>🗳️</span>
+
+                Confirm & Submit Vote
+
+            </button>
+
+            <a asp-controller="Election"
+               asp-action="Details"
+               asp-route-id="@election?.Id"
+               class="change-selection-button">
+
+                Change Selection
+
+            </a>
+
+        </form>
+
+        <!-- Security -->
+        <div class="vote-security-note">
+
+            <span>🔐</span>
+
+            <div>
+                <strong>Your vote matters</strong>
+
+                <p>
+                    Your vote will be recorded securely for this election.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

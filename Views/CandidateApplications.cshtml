@@ -1,0 +1,341 @@
+﻿@model IEnumerable<OnlineVotingApplication.Models.CandidateApplication>
+
+@{
+    ViewData["Title"] = "Candidate Applications";
+}
+
+<div class="admin-applications-page">
+
+    <div class="admin-applications-container">
+
+        <div class="admin-applications-header">
+
+            <div>
+                <span class="admin-applications-eyebrow">
+                    ADMIN PANEL
+                </span>
+
+                <h1>Candidate Applications</h1>
+
+                <p>
+                    Review student candidate applications and approve or reject them.
+                </p>
+            </div>
+
+            <div class="admin-applications-header-icon">
+                🗳️
+            </div>
+
+        </div>
+
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="admin-alert admin-alert-success">
+                <span>✓</span>
+                <div>
+                    @TempData["Success"]
+                </div>
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="admin-alert admin-alert-error">
+                <span>!</span>
+                <div>
+                    @TempData["Error"]
+                </div>
+            </div>
+        }
+
+
+        <div class="admin-applications-summary">
+
+            <div class="application-summary-card">
+                <div class="summary-icon">📋</div>
+
+                <div>
+                    <span>Total Applications</span>
+                    <strong>
+                        @(Model?.Count() ?? 0)
+                    </strong>
+                </div>
+            </div>
+
+            <div class="application-summary-card pending">
+                <div class="summary-icon">⏳</div>
+
+                <div>
+                    <span>Pending</span>
+                    <strong>
+                        @(Model?.Count(x => x.Status == "Pending") ?? 0)
+                    </strong>
+                </div>
+            </div>
+
+            <div class="application-summary-card approved">
+                <div class="summary-icon">✓</div>
+
+                <div>
+                    <span>Approved</span>
+                    <strong>
+                        @(Model?.Count(x => x.Status == "Approved") ?? 0)
+                    </strong>
+                </div>
+            </div>
+
+            <div class="application-summary-card rejected">
+                <div class="summary-icon">✕</div>
+
+                <div>
+                    <span>Rejected</span>
+                    <strong>
+                        @(Model?.Count(x => x.Status == "Rejected") ?? 0)
+                    </strong>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="admin-applications-card">
+
+            <div class="admin-applications-card-header">
+
+                <div>
+                    <h2>Applications</h2>
+
+                    <p>
+                        Student applications submitted for college elections.
+                    </p>
+                </div>
+
+            </div>
+
+
+            @if (Model == null || !Model.Any())
+            {
+                <div class="applications-empty">
+
+                    <div class="applications-empty-icon">
+                        📭
+                    </div>
+
+                    <h3>No applications yet</h3>
+
+                    <p>
+                        Candidate applications submitted by students will appear here.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="applications-list">
+
+                    @foreach (var application in Model)
+                    {
+                        <div class="candidate-application-item">
+
+                            <div class="candidate-application-photo">
+
+                                @if (!string.IsNullOrWhiteSpace(application.CandidatePhoto))
+                                {
+                                    <img src="@application.CandidatePhoto"
+                                         alt="@application.FullName" />
+                                }
+                                else
+                                {
+                                    <div class="candidate-default-photo">
+                                        👤
+                                    </div>
+                                }
+
+                            </div>
+
+
+                            <div class="candidate-application-info">
+
+                                <div class="candidate-application-top">
+
+                                    <div>
+                                        <h3>
+                                            @application.FullName
+                                        </h3>
+
+                                        <span class="candidate-student-id">
+                                            Student ID: @application.StudentId
+                                        </span>
+                                    </div>
+
+
+                                    @if (application.Status == "Pending")
+                                    {
+                                        <span class="application-status pending">
+                                            Pending
+                                        </span>
+                                    }
+                                    else if (application.Status == "Approved")
+                                    {
+                                        <span class="application-status approved">
+                                            Approved
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="application-status rejected">
+                                            Rejected
+                                        </span>
+                                    }
+
+                                </div>
+
+
+                                <div class="candidate-application-details">
+
+                                    <div>
+                                        <span>Department</span>
+                                        <strong>
+                                            @application.Department
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Year</span>
+                                        <strong>
+                                            @application.Year
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Position</span>
+                                        <strong>
+                                            @application.Position
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Election ID</span>
+                                        <strong>
+                                            #@application.ElectionId
+                                        </strong>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="candidate-application-contact">
+
+                                    <span>
+                                        📧 @application.Email
+                                    </span>
+
+                                    <span>
+                                        📱 @application.PhoneNumber
+                                    </span>
+
+                                    <span>
+                                        📅 Applied:
+                                        @application.AppliedAt.ToString("dd MMM yyyy, hh:mm tt")
+                                    </span>
+
+                                </div>
+
+
+                                @if (!string.IsNullOrWhiteSpace(application.CandidateDetails))
+                                {
+                                    <div class="candidate-application-description">
+
+                                        <strong>
+                                            Candidate Details
+                                        </strong>
+
+                                        <p>
+                                            @application.CandidateDetails
+                                        </p>
+
+                                    </div>
+                                }
+
+
+                                @if (application.Status == "Rejected" &&
+                                     !string.IsNullOrWhiteSpace(application.RejectionReason))
+                                {
+                                    <div class="candidate-rejection-box">
+
+                                        <strong>
+                                            Rejection Reason
+                                        </strong>
+
+                                        <p>
+                                            @application.RejectionReason
+                                        </p>
+
+                                    </div>
+                                }
+
+
+                                @if (application.Status == "Pending")
+                                {
+                                    <div class="candidate-application-actions">
+
+                                        <form asp-controller="Admin"
+                                              asp-action="ApproveCandidate"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@application.Id" />
+
+                                            <button type="submit"
+                                                    class="candidate-approve-button"
+                                                    onclick="return confirm('Approve this candidate application?');">
+                                                ✓ Approve Candidate
+                                            </button>
+
+                                        </form>
+
+
+                                        <form asp-controller="Admin"
+                                              asp-action="RejectCandidate"
+                                              method="post"
+                                              class="candidate-reject-form">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@application.Id" />
+
+                                            <input type="text"
+                                                   name="rejectionReason"
+                                                   class="candidate-rejection-input"
+                                                   placeholder="Reason for rejection (optional)" />
+
+                                            <button type="submit"
+                                                    class="candidate-reject-button"
+                                                    onclick="return confirm('Reject this candidate application?');">
+                                                ✕ Reject
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

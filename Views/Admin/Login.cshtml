@@ -1,0 +1,108 @@
+﻿@model OnlineVotingApplication.Models.Admin
+
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<div class="admin-login-page">
+
+    <div class="admin-login-card">
+
+        <div class="admin-login-header">
+
+            <div class="admin-login-icon">
+                🔐
+            </div>
+
+            <div class="admin-login-label">
+                ADMINISTRATION
+            </div>
+
+            <h1>
+                Admin Login
+            </h1>
+
+            <p>
+                Authorized administrators only.
+            </p>
+
+        </div>
+
+
+        <form asp-controller="Admin"
+              asp-action="Login"
+              method="post"
+              autocomplete="off">
+
+            @Html.AntiForgeryToken()
+
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="Username">
+                    Username
+                </label>
+
+                <input asp-for="Username"
+                       class="form-control"
+                       type="text"
+                       autocomplete="off"
+                       autocapitalize="none"
+                       spellcheck="false"
+                       placeholder="Enter your username" />
+
+                <span asp-validation-for="Username"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="PasswordHash">
+                    Password
+                </label>
+
+                <input asp-for="PasswordHash"
+                       class="form-control"
+                       type="password"
+                       autocomplete="new-password"
+                       placeholder="Enter your password" />
+
+                <span asp-validation-for="PasswordHash"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <button type="submit"
+                    class="admin-login-submit">
+
+                Sign In Securely
+
+            </button>
+
+
+            <div class="admin-login-security">
+
+                🔒 Your administrator credentials are private
+                and should never be shared.
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,398 @@
+﻿@model OnlineVotingApplication.Models.Student
+
+@{
+    ViewData["Title"] = "Add Student";
+}
+
+<div class="admin-add-student-page">
+
+    <div class="admin-add-student-container">
+
+        <!-- HEADER -->
+        <div class="admin-add-student-header">
+
+            <div>
+                <span class="admin-results-eyebrow">
+                    ADMINISTRATION
+                </span>
+
+                <h1>Add Student</h1>
+
+                <p>
+                    Create a new student account for the college voting system.
+                </p>
+            </div>
+
+            <a asp-controller="Admin"
+               asp-action="Students"
+               class="admin-add-student-back">
+                ← Student Management
+            </a>
+
+        </div>
+
+
+        <!-- FORM CARD -->
+        <div class="admin-add-student-card">
+
+            <div class="admin-add-student-card-header">
+
+                <div class="admin-add-student-card-icon">
+                    +
+                </div>
+
+                <div>
+                    <h2>Student Information</h2>
+
+                    <p>
+                        Enter the student's official college details.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form asp-controller="Admin"
+                  asp-action="AddStudent"
+                  method="post"
+                  class="admin-add-student-form">
+
+                @Html.AntiForgeryToken()
+
+
+                <!-- VALIDATION -->
+                <div asp-validation-summary="ModelOnly"
+                     class="admin-add-validation">
+                </div>
+
+
+                <!-- BASIC INFORMATION -->
+                <div class="admin-form-section">
+
+                    <div class="admin-form-section-title">
+                        <span>01</span>
+                        Basic Information
+                    </div>
+
+
+                    <div class="admin-form-grid">
+
+                        <!-- STUDENT ID -->
+                        <div class="admin-form-group">
+
+                            <label asp-for="StudentId">
+                                Student ID
+                            </label>
+
+                            <input asp-for="StudentId"
+                                   class="admin-form-input"
+                                   placeholder="Example: BCA26001"
+                                   autocomplete="off" />
+
+                            <span asp-validation-for="StudentId"
+                                  class="admin-form-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- FULL NAME -->
+                        <div class="admin-form-group">
+
+                            <label asp-for="FullName">
+                                Full Name
+                            </label>
+
+                            <input asp-for="FullName"
+                                   class="admin-form-input"
+                                   placeholder="Enter student's full name"
+                                   autocomplete="name" />
+
+                            <span asp-validation-for="FullName"
+                                  class="admin-form-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+                        <div class="admin-form-group">
+
+                            <label asp-for="Email">
+                                Email Address
+                            </label>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="admin-form-input"
+                                   placeholder="student@example.com"
+                                   autocomplete="email" />
+
+                            <span asp-validation-for="Email"
+                                  class="admin-form-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- PHONE -->
+                        <div class="admin-form-group">
+
+                            <label asp-for="PhoneNumber">
+                                Phone Number
+                            </label>
+
+                            <input asp-for="PhoneNumber"
+                                   type="tel"
+                                   class="admin-form-input"
+                                   placeholder="10 digit mobile number"
+                                   maxlength="15"
+                                   autocomplete="tel" />
+
+                            <span asp-validation-for="PhoneNumber"
+                                  class="admin-form-error">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACADEMIC INFORMATION -->
+                <div class="admin-form-section">
+
+                    <div class="admin-form-section-title">
+                        <span>02</span>
+                        Academic Information
+                    </div>
+
+
+                    <div class="admin-form-grid">
+
+                        <!-- YEAR -->
+                        <div class="admin-form-group">
+
+                            <label asp-for="Year">
+                                Year
+                            </label>
+
+                            <select asp-for="Year"
+                                    class="admin-form-input">
+
+                                <option value="">
+                                    Select Year
+                                </option>
+
+                                <option value="1st">
+                                    1st Year
+                                </option>
+
+                                <option value="2nd">
+                                    2nd Year
+                                </option>
+
+                                <option value="3rd">
+                                    3rd Year
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="Year"
+                                  class="admin-form-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- DEPARTMENT -->
+                        <div class="admin-form-group">
+
+                            <label asp-for="Department">
+                                Department
+                            </label>
+
+                            <input asp-for="Department"
+                                   class="admin-form-input"
+                                   placeholder="Example: BCA"
+                                   autocomplete="off" />
+
+                            <span asp-validation-for="Department"
+                                  class="admin-form-error">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOGIN INFORMATION -->
+                <div class="admin-form-section">
+
+                    <div class="admin-form-section-title">
+                        <span>03</span>
+                        Login Information
+                    </div>
+
+
+                    <div class="admin-form-grid">
+
+                        <!-- PASSWORD -->
+                        <div class="admin-form-group">
+
+                            <label asp-for="PasswordHash">
+                                Login Password
+                            </label>
+
+                            <div class="admin-password-wrapper">
+
+                                <input asp-for="PasswordHash"
+                                       type="password"
+                                       id="studentPassword"
+                                       class="admin-form-input"
+                                       placeholder="Create login password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="admin-password-toggle"
+                                        onclick="toggleStudentPassword()">
+                                    Show
+                                </button>
+
+                            </div>
+
+                            <span asp-validation-for="PasswordHash"
+                                  class="admin-form-error">
+                            </span>
+
+                            <small class="admin-form-help">
+                                The password will be securely hashed before being stored.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACCOUNT STATUS -->
+                <div class="admin-form-section">
+
+                    <div class="admin-form-section-title">
+                        <span>04</span>
+                        Account Status
+                    </div>
+
+
+                    <div class="admin-account-status-box">
+
+                        <label class="admin-checkbox-label">
+
+                            <input asp-for="IsActive"
+                                   type="checkbox" />
+
+                            <span class="admin-custom-checkbox"></span>
+
+                            <span>
+                                <strong>Activate student account</strong>
+
+                                <small>
+                                    The student can log in and participate
+                                    when an election is open.
+                                </small>
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="admin-add-student-footer">
+
+                    <a asp-controller="Admin"
+                       asp-action="Students"
+                       class="admin-add-cancel-button">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="admin-add-submit-button">
+                        <span>✓</span>
+                        Create Student Account
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- SECURITY NOTE -->
+        <div class="admin-add-student-security">
+
+            <div>
+                🔒
+            </div>
+
+            <section>
+
+                <strong>Secure Student Registration</strong>
+
+                <p>
+                    Student passwords are protected using ASP.NET Core
+                    password hashing. Passwords are never stored as plain text.
+                </p>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function toggleStudentPassword() {
+
+        const password =
+            document.getElementById("studentPassword");
+
+        const button =
+            document.querySelector(".admin-password-toggle");
+
+        if (!password || !button)
+            return;
+
+        if (password.type === "password") {
+
+            password.type = "text";
+            button.textContent = "Hide";
+
+        }
+        else {
+
+            password.type = "password";
+            button.textContent = "Show";
+
+        }
+
+    }
+
+</script>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

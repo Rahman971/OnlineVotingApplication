@@ -1,0 +1,173 @@
+﻿@model OnlineVotingApplication.Models.Student
+
+@{
+    ViewData["Title"] = "Student Registration";
+}
+
+<div class="student-register-page">
+
+    <div class="student-register-container">
+
+        <div class="student-register-card">
+
+            <div class="student-register-header">
+
+                <div class="student-register-icon">
+                    🎓
+                </div>
+
+                <span class="student-register-eyebrow">
+                    STUDENT PORTAL
+                </span>
+
+                <h1>Create Student Account</h1>
+
+                <p>
+                    Register your account to participate in college elections.
+                </p>
+
+            </div>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="student-success-message">
+                    @TempData["Success"]
+                </div>
+            }
+
+            <form asp-controller="Student"
+                  asp-action="Register"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="student-validation-summary">
+                </div>
+
+                <div class="student-form-group">
+
+                    <label asp-for="StudentId">
+                        Student ID
+                    </label>
+
+                    <input asp-for="StudentId"
+                           class="student-form-control"
+                           placeholder="Enter your Student ID"
+                           autocomplete="username" />
+
+                    <span asp-validation-for="StudentId"
+                          class="student-field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="student-form-group">
+
+                    <label asp-for="FullName">
+                        Full Name
+                    </label>
+
+                    <input asp-for="FullName"
+                           class="student-form-control"
+                           placeholder="Enter your full name" />
+
+                    <span asp-validation-for="FullName"
+                          class="student-field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="student-form-group">
+
+                    <label asp-for="Email">
+                        Email Address
+                    </label>
+
+                    <input asp-for="Email"
+                           type="email"
+                           class="student-form-control"
+                           placeholder="Enter your email address"
+                           autocomplete="email" />
+
+                    <span asp-validation-for="Email"
+                          class="student-field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="student-form-group">
+
+                    <label asp-for="Department">
+                        Department
+                    </label>
+
+                    <input asp-for="Department"
+                           class="student-form-control"
+                           placeholder="Enter your department" />
+
+                    <span asp-validation-for="Department"
+                          class="student-field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="student-form-group">
+
+                    <label asp-for="PasswordHash">
+                        Password
+                    </label>
+
+                    <input asp-for="PasswordHash"
+                           type="password"
+                           class="student-form-control"
+                           placeholder="Create a password"
+                           autocomplete="new-password" />
+
+                    <span class="student-password-note">
+                        Your password will be stored securely.
+                    </span>
+
+                    <span asp-validation-for="PasswordHash"
+                          class="student-field-error">
+                    </span>
+
+                </div>
+
+
+                <button type="submit"
+                        class="student-register-button">
+
+                    Create Student Account
+
+                </button>
+
+            </form>
+
+
+            <div class="student-register-footer">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <a asp-controller="Student"
+                   asp-action="Login">
+                    Login here
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

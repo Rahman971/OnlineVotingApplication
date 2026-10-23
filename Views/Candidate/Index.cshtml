@@ -1,0 +1,287 @@
+﻿@model IEnumerable<OnlineVotingApplication.Models.Candidate>
+
+@{
+    ViewData["Title"] = "Candidate Management";
+}
+
+<div class="candidate-management-page">
+
+    <div class="candidate-management-container">
+
+        <!-- Header -->
+        <div class="candidate-management-header">
+
+            <div>
+                <span class="candidate-eyebrow">
+                    ADMINISTRATION
+                </span>
+
+                <h1>Candidate Management</h1>
+
+                <p>
+                    Add, review and approve candidates for college elections.
+                </p>
+            </div>
+
+            <a asp-controller="Candidate"
+               asp-action="Create"
+               class="candidate-add-button">
+                + Add Candidate
+            </a>
+
+        </div>
+
+
+        <!-- Alerts -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="candidate-alert candidate-success-alert">
+                ✓ @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="candidate-alert candidate-error-alert">
+                ⚠ @TempData["Error"]
+            </div>
+        }
+
+
+        <!-- Summary -->
+        <div class="candidate-summary">
+
+            <div class="candidate-summary-card">
+                <span>Total Candidates</span>
+                <strong>@Model.Count()</strong>
+            </div>
+
+            <div class="candidate-summary-card">
+                <span>Approved</span>
+                <strong>
+                    @Model.Count(c => c.IsApproved)
+                </strong>
+            </div>
+
+            <div class="candidate-summary-card">
+                <span>Pending Approval</span>
+                <strong>
+                    @Model.Count(c => !c.IsApproved)
+                </strong>
+            </div>
+
+        </div>
+
+
+        <!-- Candidate List -->
+        @if (Model.Any())
+        {
+            <div class="candidate-list-card">
+
+                <div class="candidate-list-header">
+                    <div>
+                        <h2>Registered Candidates</h2>
+                        <p>Review candidate information and approval status.</p>
+                    </div>
+                </div>
+
+
+                <div class="candidate-table-wrapper">
+
+                    <table class="candidate-table">
+
+                        <thead>
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Candidate ID</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Election</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var candidate in Model)
+                            {
+                                <tr>
+
+                                    <!-- Candidate -->
+                                    <td>
+
+                                        <div class="candidate-table-person">
+
+                                            @if (!string.IsNullOrWhiteSpace(candidate.PhotoPath))
+                                            {
+                                                <img src="@candidate.PhotoPath"
+                                                     alt="@candidate.FullName"
+                                                     class="candidate-table-photo" />
+                                            }
+                                            else
+                                            {
+                                                <div class="candidate-table-avatar">
+                                                    👤
+                                                </div>
+                                            }
+
+                                            <div>
+                                                <strong>
+                                                    @candidate.FullName
+                                                </strong>
+
+                                                <small>
+                                                    Registered
+                                                    @candidate.CreatedAt.ToString("dd MMM yyyy")
+                                                </small>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- ID -->
+                                    <td>
+                                        <span class="candidate-id-badge">
+                                            @candidate.CandidateId
+                                        </span>
+                                    </td>
+
+
+                                    <!-- Department -->
+                                    <td>
+                                        @candidate.Department
+                                    </td>
+
+
+                                    <!-- Position -->
+                                    <td>
+                                        @candidate.Position
+                                    </td>
+
+
+                                    <!-- Election -->
+                                    <td>
+
+                                        @if (candidate.Election != null)
+                                        {
+                                            <span class="candidate-election-name">
+                                                @candidate.Election.ElectionName
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="candidate-no-election">
+                                                Not assigned
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- Status -->
+                                    <td>
+
+                                        @if (candidate.IsApproved)
+                                        {
+                                            <span class="candidate-status approved">
+                                                ✓ Approved
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="candidate-status pending">
+                                                ● Pending
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- Action -->
+                                    <td>
+
+                                        @if (!candidate.IsApproved)
+                                        {
+                                            <form asp-controller="Candidate"
+                                                  asp-action="Approve"
+                                                  asp-route-id="@candidate.Id"
+                                                  method="post">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <button type="submit"
+                                                        class="candidate-approve-button">
+                                                    Approve
+                                                </button>
+
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span class="candidate-approved-text">
+                                                Active
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <!-- Empty State -->
+
+            <div class="candidate-empty-state">
+
+                <div class="candidate-empty-icon">
+                    👤
+                </div>
+
+                <h2>No Candidates Added</h2>
+
+                <p>
+                    No candidates have been registered yet.
+                    Use the button below to add a candidate.
+                </p>
+
+                <a asp-controller="Candidate"
+                   asp-action="Create"
+                   class="candidate-empty-button">
+                    + Add Candidate
+                </a>
+
+            </div>
+        }
+
+
+        <!-- Information -->
+        <div class="candidate-management-info">
+
+            <span>🔐</span>
+
+            <div>
+                <strong>Candidate Approval</strong>
+
+                <p>
+                    Candidates must be reviewed and approved by an administrator
+                    before they become available for student voting.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,243 @@
+﻿@model OnlineVotingApplication.Models.Election
+
+@{
+    ViewData["Title"] = "Create Election";
+}
+
+<div class="election-create-page">
+
+    <div class="election-create-container">
+
+        <!-- Back -->
+        <a asp-controller="AdminElection"
+           asp-action="Index"
+           class="election-create-back">
+            ← Back to Election Management
+        </a>
+
+        <!-- Header -->
+        <div class="election-create-header">
+
+            <div class="election-create-header-content">
+
+                <span class="election-create-eyebrow">
+                    ADMINISTRATION PORTAL
+                </span>
+
+                <h1>Create New Election</h1>
+
+                <p>
+                    Configure a secure digital election for Thulasi College.
+                </p>
+
+            </div>
+
+            <div class="election-create-header-icon">
+                🗳️
+            </div>
+
+        </div>
+
+
+        <!-- Main Card -->
+        <div class="election-create-card">
+
+            <div class="election-create-card-top">
+
+                <div class="election-create-card-icon">
+                    🗳️
+                </div>
+
+                <div>
+                    <h2>Election Information</h2>
+
+                    <p>
+                        Provide the basic details and voting schedule.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form asp-controller="AdminElection"
+                  asp-action="Create"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="election-create-validation">
+                </div>
+
+
+                <div class="election-create-form-grid">
+
+                    <!-- Election Name -->
+                    <div class="election-create-field election-create-full">
+
+                        <label asp-for="ElectionName">
+                            Election Name
+                        </label>
+
+                        <input asp-for="ElectionName"
+                               class="election-create-input"
+                               placeholder="e.g. Student Council Election"
+                               autocomplete="off" />
+
+                        <span asp-validation-for="ElectionName"
+                              class="election-create-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="election-create-field election-create-full">
+
+                        <label asp-for="Description">
+                            Description
+                            <span class="election-create-optional">
+                                Optional
+                            </span>
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="election-create-input election-create-textarea"
+                                  rows="4"
+                                  placeholder="Briefly describe this election..."></textarea>
+
+                        <span asp-validation-for="Description"
+                              class="election-create-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Start -->
+                    <div class="election-create-field">
+
+                        <label asp-for="StartDate">
+                            Start Date & Time
+                        </label>
+
+                        <div class="election-create-input-wrap">
+
+                            <span class="election-create-input-icon">
+                                📅
+                            </span>
+
+                            <input asp-for="StartDate"
+                                   type="datetime-local"
+                                   class="election-create-input election-create-date-input" />
+
+                        </div>
+
+                        <span asp-validation-for="StartDate"
+                              class="election-create-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- End -->
+                    <div class="election-create-field">
+
+                        <label asp-for="EndDate">
+                            End Date & Time
+                        </label>
+
+                        <div class="election-create-input-wrap">
+
+                            <span class="election-create-input-icon">
+                                🏁
+                            </span>
+
+                            <input asp-for="EndDate"
+                                   type="datetime-local"
+                                   class="election-create-input election-create-date-input" />
+
+                        </div>
+
+                        <span asp-validation-for="EndDate"
+                              class="election-create-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Status Notice -->
+                <div class="election-create-status">
+
+                    <div class="election-create-status-icon">
+                        🔒
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Election will be created as Inactive
+                        </strong>
+
+                        <p>
+                            After creating the election, you can add candidates,
+                            approve them and start voting from Election Management.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Actions -->
+                <div class="election-create-actions">
+
+                    <a asp-controller="AdminElection"
+                       asp-action="Index"
+                       class="election-create-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="election-create-submit">
+
+                        Create Election
+
+                        <span>→</span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- Security Note -->
+        <div class="election-create-security">
+
+            <span>🛡️</span>
+
+            <div>
+
+                <strong>
+                    Secure Election Setup
+                </strong>
+
+                <p>
+                    Only authorized administrators can create and manage elections.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

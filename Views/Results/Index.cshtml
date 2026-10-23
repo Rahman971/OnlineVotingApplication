@@ -1,0 +1,392 @@
+﻿@model IEnumerable<OnlineVotingApplication.Models.Election>
+
+@{
+    ViewData["Title"] = "Election Results";
+}
+
+<div class="admin-results-modern">
+
+    <!-- TOP HEADER -->
+    <section class="results-topbar">
+
+        <div class="results-title-area">
+            <div class="results-small-title">
+                ADMIN CONSOLE
+            </div>
+
+            <h1>Election Results</h1>
+
+            <p>
+                Review election activity, monitor private results,
+                and publish final results securely.
+            </p>
+        </div>
+
+        <a asp-controller="Admin"
+           asp-action="Dashboard"
+           class="results-dashboard-link">
+            <span>←</span>
+            Dashboard
+        </a>
+
+    </section>
+
+
+    <!-- ALERTS -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="modern-alert modern-alert-success">
+            <span class="alert-symbol">✓</span>
+
+            <div>
+                <strong>Success</strong>
+                <p>@TempData["Success"]</p>
+            </div>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="modern-alert modern-alert-error">
+            <span class="alert-symbol">!</span>
+
+            <div>
+                <strong>Action Required</strong>
+                <p>@TempData["Error"]</p>
+            </div>
+        </div>
+    }
+
+
+    @if (Model == null || !Model.Any())
+    {
+        <!-- EMPTY STATE -->
+
+        <section class="results-empty-modern">
+
+            <div class="empty-result-circle">
+                <span>▥</span>
+            </div>
+
+            <div class="empty-result-content">
+
+                <div class="empty-result-label">
+                    RESULTS CENTER
+                </div>
+
+                <h2>No Elections Yet</h2>
+
+                <p>
+                    Elections created by the administrator will appear
+                    here. Once an election is completed, its results can
+                    be reviewed and published from this panel.
+                </p>
+
+                <a asp-controller="AdminElection"
+                   asp-action="Create"
+                   class="create-election-modern">
+                    <span>+</span>
+                    Create New Election
+                </a>
+
+            </div>
+
+        </section>
+    }
+    else
+    {
+        var now = DateTime.Now;
+
+        <!-- SUMMARY -->
+
+        <section class="results-summary-row">
+
+            <div class="summary-box">
+                <div class="summary-box-icon">▣</div>
+
+                <div>
+                    <span>Total Elections</span>
+                    <strong>@Model.Count()</strong>
+                </div>
+            </div>
+
+
+            <div class="summary-box">
+                <div class="summary-box-icon">◉</div>
+
+                <div>
+                    <span>Completed</span>
+                    <strong>
+                        @Model.Count(e => e.EndDate < now)
+                    </strong>
+                </div>
+            </div>
+
+
+            <div class="summary-box">
+                <div class="summary-box-icon">✓</div>
+
+                <div>
+                    <span>Published</span>
+                    <strong>
+                        @Model.Count(e => e.IsPublished)
+                    </strong>
+                </div>
+            </div>
+
+
+            <div class="summary-box">
+                <div class="summary-box-icon">◷</div>
+
+                <div>
+                    <span>In Progress</span>
+                    <strong>
+                        @Model.Count(e =>
+                            e.IsActive &&
+                            e.StartDate <= now &&
+                            e.EndDate >= now)
+                    </strong>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- SECTION HEADER -->
+
+        <div class="results-section-heading">
+
+            <div>
+                <div class="section-mini-label">
+                    ELECTION MONITOR
+                </div>
+
+                <h2>All Elections</h2>
+            </div>
+
+            <div class="private-status">
+                <span></span>
+                Private administrator view
+            </div>
+
+        </div>
+
+
+        <!-- ELECTION CARDS -->
+
+        <section class="modern-election-list">
+
+            @foreach (var election in Model)
+            {
+                bool isVoting =
+                    election.IsActive &&
+                    election.StartDate <= now &&
+                    election.EndDate >= now;
+
+                bool isCompleted =
+                    election.EndDate < now;
+
+                bool isPublished =
+                    election.IsPublished;
+
+                string statusClass;
+                string statusText;
+
+                if (isPublished)
+                {
+                    statusClass = "status-published";
+                    statusText = "PUBLISHED";
+                }
+                else if (isCompleted)
+                {
+                    statusClass = "status-completed";
+                    statusText = "COMPLETED";
+                }
+                else if (isVoting)
+                {
+                    statusClass = "status-voting";
+                    statusText = "VOTING LIVE";
+                }
+                else
+                {
+                    statusClass = "status-upcoming";
+                    statusText = "UPCOMING";
+                }
+
+
+                <article class="modern-election-row">
+
+                    <!-- ICON -->
+
+                    <div class="modern-election-mark">
+                        <span>🗳</span>
+                    </div>
+
+
+                    <!-- MAIN INFO -->
+
+                    <div class="modern-election-main">
+
+                        <div class="modern-election-name-row">
+
+                            <h3>
+                                @election.ElectionName
+                            </h3>
+
+                            <span class="modern-election-status @statusClass">
+                                <i></i>
+                                @statusText
+                            </span>
+
+                        </div>
+
+
+                        @if (!string.IsNullOrWhiteSpace(
+                            election.Description))
+                        {
+                            <p class="modern-election-description">
+                                @election.Description
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="modern-election-description">
+                                College election managed through the
+                                Online Voting System.
+                            </p>
+                        }
+
+
+                        <div class="modern-election-meta">
+
+                            <div class="meta-item">
+
+                                <span class="meta-icon">
+                                    ◷
+                                </span>
+
+                                <div>
+                                    <small>START DATE</small>
+                                    <strong>
+                                        @election.StartDate.ToString(
+                                            "dd MMM yyyy, hh:mm tt")
+                                    </strong>
+                                </div>
+
+                            </div>
+
+
+                            <div class="meta-divider"></div>
+
+
+                            <div class="meta-item">
+
+                                <span class="meta-icon">
+                                    ◷
+                                </span>
+
+                                <div>
+                                    <small>END DATE</small>
+                                    <strong>
+                                        @election.EndDate.ToString(
+                                            "dd MMM yyyy, hh:mm tt")
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="modern-election-actions">
+
+                        <a asp-controller="AdminResults"
+                           asp-action="Details"
+                           asp-route-id="@election.Id"
+                           class="private-results-button">
+
+                            <span>▥</span>
+                            Private Results
+
+                        </a>
+
+
+                        @if (isCompleted && !isPublished)
+                        {
+                            <form asp-controller="AdminResults"
+                                  asp-action="Publish"
+                                  asp-route-id="@election.Id"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="publish-modern-button"
+                                        onclick="return confirm('Publish the final results of this election?');">
+
+                                    <span>✓</span>
+                                    Publish Results
+
+                                </button>
+
+                            </form>
+                        }
+
+
+                        @if (isPublished)
+                        {
+                            <form asp-controller="AdminResults"
+                                  asp-action="Unpublish"
+                                  asp-route-id="@election.Id"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="unpublish-modern-button"
+                                        onclick="return confirm('Hide these results from the public?');">
+
+                                    Hide Public Results
+
+                                </button>
+
+                            </form>
+                        }
+
+                    </div>
+
+                </article>
+            }
+
+        </section>
+
+
+        <!-- SECURITY FOOTER -->
+
+        <section class="results-security-panel">
+
+            <div class="security-panel-icon">
+                🔒
+            </div>
+
+            <div>
+                <strong>
+                    Result Publication Control
+                </strong>
+
+                <p>
+                    Vote counts remain private while an election is active.
+                    Public results become available only after the election
+                    has ended and an administrator explicitly publishes them.
+                </p>
+            </div>
+
+        </section>
+
+    }
+
+</div>

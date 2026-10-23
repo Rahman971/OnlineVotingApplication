@@ -1,0 +1,272 @@
+﻿@model List<OnlineVotingApplication.Controllers.ResultViewModel>
+
+@{
+    ViewData["Title"] = "Election Results";
+
+    var election =
+        ViewBag.Election as OnlineVotingApplication.Models.Election;
+
+    int totalVotes = ViewBag.TotalVotes ?? 0;
+
+    var winner = Model
+        .OrderByDescending(x => x.VoteCount)
+        .FirstOrDefault();
+
+    bool hasVotes = totalVotes > 0;
+}
+
+<div class="public-results-details-page">
+
+    <div class="public-results-details-container">
+
+        <div class="public-results-details-top">
+
+            <div>
+                <span class="public-results-eyebrow">
+                    OFFICIAL ELECTION RESULTS
+                </span>
+
+                <h1>Election Results</h1>
+
+                <p>
+                    Final results for the completed college election.
+                </p>
+            </div>
+
+            <a asp-controller="Results"
+               asp-action="Index"
+               class="public-results-back">
+                ← All Results
+            </a>
+
+        </div>
+
+        @if (election != null)
+        {
+            <div class="public-results-election">
+
+                <div>
+                    <span>COMPLETED ELECTION</span>
+
+                    <h2>
+                        @election.ElectionName
+                    </h2>
+
+                    @if (!string.IsNullOrWhiteSpace(election.Description))
+                    {
+                        <p>
+                            @election.Description
+                        </p>
+                    }
+
+                    <small>
+                        Closed on
+                        @election.EndDate.ToString("dd MMM yyyy, hh:mm tt")
+                    </small>
+                </div>
+
+                <div class="public-results-closed">
+                    CLOSED
+                </div>
+
+            </div>
+        }
+
+        <div class="public-results-stats">
+
+            <div>
+                <span>Total Votes</span>
+                <strong>@totalVotes</strong>
+            </div>
+
+            <div>
+                <span>Candidates</span>
+                <strong>@Model.Count</strong>
+            </div>
+
+            <div>
+                <span>Winning Candidate</span>
+                <strong>
+                    @(hasVotes && winner != null
+                        ? winner.CandidateName
+                        : "Not Available")
+                </strong>
+            </div>
+
+        </div>
+
+        @if (hasVotes && winner != null)
+        {
+            <div class="public-results-winner">
+
+                <div class="public-results-trophy">
+                    🏆
+                </div>
+
+                <div>
+                    <span>WINNER</span>
+
+                    <h2>
+                        @winner.CandidateName
+                    </h2>
+
+                    <p>
+                        @winner.Position
+                        ·
+                        @winner.VoteCount vote(s)
+                    </p>
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="public-results-no-votes">
+
+                <div>📊</div>
+
+                <h2>No Votes Recorded</h2>
+
+                <p>
+                    No votes were recorded for this election.
+                </p>
+
+            </div>
+        }
+
+        @if (Model.Any())
+        {
+            <div class="public-results-table-card">
+
+                <div class="public-results-table-header">
+
+                    <span>
+                        RESULT BREAKDOWN
+                    </span>
+
+                    <h2>
+                        Candidate Results
+                    </h2>
+
+                </div>
+
+                <div class="public-results-table-wrapper">
+
+                    <table class="public-results-table">
+
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Candidate</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Votes</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @{
+                                int rank = 1;
+                            }
+
+                            @foreach (var result in Model)
+                            {
+                                double percentage =
+                                    totalVotes > 0
+                                    ? result.VoteCount * 100.0 / totalVotes
+                                    : 0;
+
+                                <tr>
+
+                                    <td>
+                                        <div class="public-result-rank">
+                                            @rank
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="public-result-candidate">
+
+                                            @if (!string.IsNullOrEmpty(result.PhotoPath))
+                                            {
+                                                <img src="@result.PhotoPath"
+                                                     alt="Candidate"
+                                                     class="public-result-photo" />
+                                            }
+                                            else
+                                            {
+                                                <div class="public-result-photo-placeholder">
+                                                    👤
+                                                </div>
+                                            }
+
+                                            <div>
+                                                <strong>
+                                                    @result.CandidateName
+                                                </strong>
+
+                                                <small>
+                                                    @result.CandidateCode
+                                                </small>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        @result.Department
+                                    </td>
+
+                                    <td>
+                                        @result.Position
+                                    </td>
+
+                                    <td>
+                                        <strong class="public-result-votes">
+                                            @result.VoteCount
+                                        </strong>
+                                    </td>
+
+                                    <td>
+
+                                        <div class="public-result-percentage">
+
+                                            <div class="public-result-progress">
+
+                                                <div class="public-result-progress-fill"
+                                                     style="width:@percentage.ToString("0.##")%">
+                                                </div>
+
+                                            </div>
+
+                                            <span>
+                                                @percentage.ToString("0.##")%
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                                rank++;
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        }
+
+        <div class="public-results-note">
+            🔒 Results shown here are for completed elections only.
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,76 @@
+﻿@model OnlineVotingApplication.Models.Election
+
+@{
+    ViewData["Title"] = "Vote Submitted";
+}
+
+<div class="vote-success-page">
+
+    <div class="vote-success-container">
+
+        <div class="vote-success-card">
+
+            <div class="vote-success-icon">
+                ✓
+            </div>
+
+            <span class="vote-success-eyebrow">
+                VOTE SUCCESSFULLY SUBMITTED
+            </span>
+
+            <h1>Your Vote Has Been Recorded</h1>
+
+            <p class="vote-success-message">
+                Thank you for participating in the college election.
+                Your vote has been securely recorded.
+            </p>
+
+            <div class="vote-success-election">
+
+                <span>Election</span>
+
+                <strong>
+                    @Model.ElectionName
+                </strong>
+
+            </div>
+
+            <div class="vote-success-notice">
+
+                <span>🔒</span>
+
+                <div>
+                    <strong>One Vote Per Election</strong>
+
+                    <p>
+                        Your vote cannot be submitted again for this election.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="vote-success-actions">
+
+                <a asp-controller="Election"
+                   asp-action="Index"
+                   class="vote-success-primary">
+                    View Elections
+                </a>
+
+                <a asp-controller="Student"
+                   asp-action="Dashboard"
+                   class="vote-success-secondary">
+                    Student Dashboard
+                </a>
+
+            </div>
+
+        </div>
+
+        <p class="vote-success-footer">
+            Thank you for exercising your democratic right.
+        </p>
+
+    </div>
+
+</div>

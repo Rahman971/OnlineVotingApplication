@@ -1,0 +1,401 @@
+﻿@model OnlineVotingApplication.Models.Student
+
+@{
+    ViewData["Title"] = "Edit Student";
+}
+
+<div class="admin-edit-student-page">
+
+    <div class="admin-edit-student-container">
+
+        <!-- HEADER -->
+        <div class="admin-edit-student-header">
+
+            <div>
+                <span class="admin-results-eyebrow">
+                    ADMINISTRATION
+                </span>
+
+                <h1>Edit Student</h1>
+
+                <p>
+                    Update the student's account and academic information.
+                </p>
+            </div>
+
+            <a asp-controller="Admin"
+               asp-action="Students"
+               class="admin-edit-student-back">
+                ← Student Management
+            </a>
+
+        </div>
+
+
+        <!-- FORM CARD -->
+        <div class="admin-edit-student-card">
+
+            <div class="admin-edit-student-card-header">
+
+                <div class="admin-edit-student-icon">
+                    ✎
+                </div>
+
+                <div>
+                    <h2>@Model.FullName</h2>
+
+                    <p>
+                        Student ID:
+                        <strong>@Model.StudentId</strong>
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form asp-controller="Admin"
+                  asp-action="EditStudent"
+                  method="post"
+                  class="admin-edit-student-form">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       asp-for="Id" />
+
+
+                <!-- VALIDATION -->
+                <div asp-validation-summary="ModelOnly"
+                     class="admin-edit-validation">
+                </div>
+
+
+                <!-- BASIC INFORMATION -->
+                <div class="admin-edit-section">
+
+                    <div class="admin-edit-section-title">
+                        <span>01</span>
+                        Basic Information
+                    </div>
+
+
+                    <div class="admin-edit-grid">
+
+                        <!-- STUDENT ID -->
+                        <div class="admin-edit-group">
+
+                            <label asp-for="StudentId">
+                                Student ID
+                            </label>
+
+                            <input asp-for="StudentId"
+                                   class="admin-edit-input"
+                                   autocomplete="off" />
+
+                            <span asp-validation-for="StudentId"
+                                  class="admin-edit-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- FULL NAME -->
+                        <div class="admin-edit-group">
+
+                            <label asp-for="FullName">
+                                Full Name
+                            </label>
+
+                            <input asp-for="FullName"
+                                   class="admin-edit-input"
+                                   autocomplete="name" />
+
+                            <span asp-validation-for="FullName"
+                                  class="admin-edit-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+                        <div class="admin-edit-group">
+
+                            <label asp-for="Email">
+                                Email Address
+                            </label>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="admin-edit-input"
+                                   autocomplete="email" />
+
+                            <span asp-validation-for="Email"
+                                  class="admin-edit-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- PHONE -->
+                        <div class="admin-edit-group">
+
+                            <label asp-for="PhoneNumber">
+                                Phone Number
+                            </label>
+
+                            <input asp-for="PhoneNumber"
+                                   type="tel"
+                                   class="admin-edit-input"
+                                   maxlength="15"
+                                   autocomplete="tel" />
+
+                            <span asp-validation-for="PhoneNumber"
+                                  class="admin-edit-error">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACADEMIC -->
+                <div class="admin-edit-section">
+
+                    <div class="admin-edit-section-title">
+                        <span>02</span>
+                        Academic Information
+                    </div>
+
+
+                    <div class="admin-edit-grid">
+
+                        <!-- YEAR -->
+                        <div class="admin-edit-group">
+
+                            <label asp-for="Year">
+                                Year
+                            </label>
+
+                            <select asp-for="Year"
+                                    class="admin-edit-input">
+
+                                <option value="">
+                                    Select Year
+                                </option>
+
+                                <option value="1st">
+                                    1st Year
+                                </option>
+
+                                <option value="2nd">
+                                    2nd Year
+                                </option>
+
+                                <option value="3rd">
+                                    3rd Year
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="Year"
+                                  class="admin-edit-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- DEPARTMENT -->
+                        <div class="admin-edit-group">
+
+                            <label asp-for="Department">
+                                Department
+                            </label>
+
+                            <input asp-for="Department"
+                                   class="admin-edit-input"
+                                   autocomplete="off" />
+
+                            <span asp-validation-for="Department"
+                                  class="admin-edit-error">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+                <div class="admin-edit-section">
+
+                    <div class="admin-edit-section-title">
+                        <span>03</span>
+                        Password
+                    </div>
+
+
+                    <div class="admin-edit-password-box">
+
+                        <div class="admin-edit-group">
+
+                            <label asp-for="PasswordHash">
+                                New Password
+                            </label>
+
+                            <div class="admin-edit-password-wrapper">
+
+                                <input asp-for="PasswordHash"
+                                       type="password"
+                                       id="editStudentPassword"
+                                       class="admin-edit-input"
+                                       placeholder="Leave blank to keep current password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="admin-edit-password-toggle"
+                                        onclick="toggleEditStudentPassword()">
+                                    Show
+                                </button>
+
+                            </div>
+
+                            <span asp-validation-for="PasswordHash"
+                                  class="admin-edit-error">
+                            </span>
+
+                            <small class="admin-edit-help">
+                                Leave this field empty if the current password
+                                should remain unchanged.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACCOUNT STATUS -->
+                <div class="admin-edit-section">
+
+                    <div class="admin-edit-section-title">
+                        <span>04</span>
+                        Account Status
+                    </div>
+
+
+                    <div class="admin-edit-status-box">
+
+                        <label class="admin-edit-checkbox-label">
+
+                            <input asp-for="IsActive"
+                                   type="checkbox" />
+
+                            <span class="admin-edit-custom-checkbox"></span>
+
+                            <span>
+
+                                <strong>
+                                    Active student account
+                                </strong>
+
+                                <small>
+                                    Active students can log in and vote
+                                    when an election is open.
+                                </small>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="admin-edit-footer">
+
+                    <a asp-controller="Admin"
+                       asp-action="Students"
+                       class="admin-edit-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="admin-edit-save">
+                        <span>✓</span>
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- SECURITY NOTE -->
+        <div class="admin-edit-security">
+
+            <div class="admin-edit-security-icon">
+                🔒
+            </div>
+
+            <div>
+
+                <strong>Account Security</strong>
+
+                <p>
+                    Changing a password will securely hash the new password.
+                    Existing passwords are never displayed.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function toggleEditStudentPassword() {
+
+        const password =
+            document.getElementById("editStudentPassword");
+
+        const button =
+            document.querySelector(".admin-edit-password-toggle");
+
+        if (!password || !button)
+            return;
+
+        if (password.type === "password") {
+
+            password.type = "text";
+            button.textContent = "Hide";
+
+        }
+        else {
+
+            password.type = "password";
+            button.textContent = "Show";
+
+        }
+
+    }
+
+</script>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

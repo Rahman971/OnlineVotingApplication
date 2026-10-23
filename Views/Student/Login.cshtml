@@ -1,0 +1,168 @@
+﻿@{
+    ViewData["Title"] = "Student Login";
+}
+
+<div class="student-login-page">
+
+    <div class="student-login-container">
+
+        <div class="student-login-card">
+
+            <div class="student-login-header">
+
+                <div class="student-login-icon">
+                    🎓
+                </div>
+
+                <span class="student-login-eyebrow">
+                    STUDENT PORTAL
+                </span>
+
+                <h1>Student Login</h1>
+
+                <p>
+                    Login securely to participate in college elections.
+                </p>
+
+            </div>
+
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="student-login-error">
+                    <span>⚠</span>
+                    <span>@ViewBag.Error</span>
+                </div>
+            }
+
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="student-login-success">
+                    <span>✓</span>
+                    <span>@TempData["Success"]</span>
+                </div>
+            }
+
+
+            <form asp-controller="Student"
+                  asp-action="Login"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+
+                <!-- Student ID -->
+
+                <div class="student-login-form-group">
+
+                    <label for="studentId">
+                        Student ID
+                    </label>
+
+                    <input type="text"
+                           id="studentId"
+                           name="studentId"
+                           class="student-login-control"
+                           placeholder="Enter your Student ID"
+                           autocomplete="username"
+                           required />
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="student-login-form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           class="student-login-control"
+                           placeholder="Enter your password"
+                           autocomplete="current-password"
+                           required />
+
+                </div>
+
+
+                <!-- Forgot Password -->
+
+                <div style="display:block; text-align:right; margin:10px 0 18px;">
+
+                    <a asp-controller="Student"
+                       asp-action="ForgotPassword"
+                       style="color:#1769aa; font-size:13px; font-weight:700; text-decoration:none;">
+
+                        Forgot Password?
+
+                    </a>
+
+                </div>
+
+
+                <!-- Login Button -->
+
+                <button type="submit"
+                        class="student-login-button">
+
+                    Login to Student Portal
+
+                </button>
+
+            </form>
+
+
+            <div class="student-login-divider">
+                <span>OR</span>
+            </div>
+
+
+            <!-- Register -->
+
+            <div class="student-login-register">
+
+                <span>
+                    Don't have an account?
+                </span>
+
+                <a asp-controller="Student"
+                   asp-action="Register">
+
+                    Create Account
+
+                </a>
+
+            </div>
+
+
+            <!-- Security -->
+
+            <div class="student-login-security">
+
+                <span>🔐</span>
+
+                <div>
+
+                    <strong>
+                        Secure Login
+                    </strong>
+
+                    <p>
+                        Your account credentials are protected
+                        and your password is securely stored.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

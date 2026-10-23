@@ -1,0 +1,321 @@
+﻿@model OnlineVotingApplication.Models.Election
+
+@{
+    ViewData["Title"] = "Election Details";
+
+    var candidates =
+        ViewBag.Candidates as IEnumerable<OnlineVotingApplication.Models.Candidate>;
+
+    bool hasVoted = ViewBag.HasVoted != null &&
+                    (bool)ViewBag.HasVoted;
+}
+
+<div class="professional-election-page">
+
+    <div class="professional-election-container">
+
+        <!-- ==========================================
+             ELECTION HEADER
+             ========================================== -->
+
+        <section class="election-hero-card">
+
+            <div class="election-hero-content">
+
+                <div class="election-eyebrow">
+                    STUDENT COUNCIL ELECTION
+                </div>
+
+                <h1>
+                    @Model.ElectionName
+                </h1>
+
+                <p>
+                    Meet the candidates and make your choice.
+                    Your vote matters.
+                </p>
+
+                <div class="election-hero-status">
+
+                    <span class="election-live-dot"></span>
+
+                    Election is currently open
+
+                </div>
+
+            </div>
+
+            <div class="election-hero-symbol">
+                🗳️
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             VOTING STATUS
+             ========================================== -->
+        @if (hasVoted)
+        {
+            <div class="professional-voted-banner">
+
+                <div class="voted-banner-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Your vote has already been submitted
+                    </strong>
+
+                    <p>
+                        You have already voted in this election.
+                        A second vote is not allowed.
+                    </p>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="professional-voting-banner">
+
+                <div class="voting-banner-icon">
+                    🔒
+                </div>
+
+                <div>
+
+                    <strong>
+                        Your vote is important
+                    </strong>
+
+                    <p>
+                        Review the candidates carefully and select
+                        the candidate you want to vote for.
+                    </p>
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- ==========================================
+             CANDIDATES SECTION
+             ========================================== -->
+
+        <section class="professional-candidates-section">
+
+            <div class="candidates-section-heading">
+
+                <div>
+
+                    <div class="section-mini-label">
+                        CANDIDATES
+                    </div>
+
+                    <h2>
+                        Meet Your Candidates
+                    </h2>
+
+                    <p>
+                        Choose the candidate you trust to represent you.
+                    </p>
+
+                </div>
+
+                @if (candidates != null)
+                {
+                    <div class="candidate-total">
+
+                        <strong>
+                            @candidates.Count()
+                        </strong>
+
+                        <span>
+                            Candidates
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+
+            @if (candidates != null && candidates.Any())
+            {
+                <div class="professional-candidate-grid">
+
+                    @foreach (var candidate in candidates)
+                    {
+                        <article class="professional-candidate-card">
+
+                            <!-- PHOTO -->
+
+                            <div class="professional-candidate-photo">
+
+                                <img src="/images/candidates/@(candidate.Id).jpg"
+                                     alt="Candidate Photo"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                                <div class="candidate-photo-fallback">
+
+                                    <span>
+                                        👤
+                                    </span>
+
+                                </div>
+
+                                <div class="candidate-approved-tag">
+                                    ✓ APPROVED
+                                </div>
+
+                            </div>
+
+
+                            <!-- DETAILS -->
+
+                            <div class="professional-candidate-body">
+
+                                <div class="candidate-number">
+                                    CANDIDATE
+                                </div>
+
+                                <h3>
+                                    @candidate.FullName
+                                </h3>
+
+
+                                @if (!string.IsNullOrWhiteSpace(candidate.Manifesto))
+                                {
+                                    <div class="professional-manifesto">
+
+                                        <div class="manifesto-label">
+                                            MANIFESTO
+                                        </div>
+
+                                        <p>
+                                            @candidate.Manifesto
+                                        </p>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="professional-manifesto">
+
+                                        <div class="manifesto-label">
+                                            ABOUT THE CANDIDATE
+                                        </div>
+
+                                        <p>
+                                            Candidate information will be
+                                            available soon.
+                                        </p>
+
+                                    </div>
+                                }
+
+
+                                <!-- VOTE -->
+                                @if (!hasVoted)
+                                {
+                                    <a asp-controller="Vote"
+                                       asp-action="Create"
+                                       asp-route-id="@candidate.Id"
+                                       class="professional-vote-button">
+
+                                        <span>
+                                            🗳️
+                                        </span>
+
+                                        Vote for this Candidate
+
+                                    </a>
+                                }
+                                else
+                                {
+                                    <div class="professional-vote-disabled">
+
+                                        ✓ Vote Submitted
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </article>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="professional-no-candidates">
+
+                    <div class="no-candidates-icon">
+                        👥
+                    </div>
+
+                    <h3>
+                        No Candidates Available
+                    </h3>
+
+                    <p>
+                        Approved candidates for this election will
+                        appear here.
+                    </p>
+
+                </div>
+            }
+
+        </section>
+
+
+        <!-- ==========================================
+             SECURITY INFORMATION
+             ========================================== -->
+
+        <section class="election-security-strip">
+
+            <div class="security-strip-item">
+
+                <span>🔐</span>
+
+                <div>
+                    <strong>Secure Voting</strong>
+                    <small>Your voting session is protected.</small>
+                </div>
+
+            </div>
+
+            <div class="security-strip-item">
+
+                <span>✓</span>
+
+                <div>
+                    <strong>One Vote Only</strong>
+                    <small>Each student can vote once.</small>
+                </div>
+
+            </div>
+
+            <div class="security-strip-item">
+
+                <span>📊</span>
+
+                <div>
+                    <strong>Transparent Results</strong>
+                    <small>Results are recorded digitally.</small>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>

@@ -1,0 +1,187 @@
+﻿@model OnlineVotingApplication.Models.Student
+
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<div class="student-dashboard-page">
+
+    <div class="student-dashboard-container">
+
+        <!-- Welcome -->
+        <div class="student-welcome-card">
+
+            <div>
+                <span class="dashboard-small-title">
+                    STUDENT PORTAL
+                </span>
+
+                <h1>
+                    Welcome, @Model.FullName
+                </h1>
+
+                <p>
+                    Cast your vote and participate in your college elections.
+                </p>
+            </div>
+
+            <div class="student-profile-icon">
+                👤
+            </div>
+
+        </div>
+
+
+        <!-- Quick Actions -->
+        <div class="dashboard-section-title">
+            <h2>Quick Actions</h2>
+            <p>Access your voting services</p>
+        </div>
+
+
+        <div class="student-action-grid">
+
+            <!-- Elections -->
+            <a asp-controller="Election"
+               asp-action="Index"
+               class="student-action-card">
+
+                <div class="student-action-icon">
+                    🗳️
+                </div>
+
+                <div>
+                    <h3>Available Elections</h3>
+
+                    <p>
+                        View active elections and cast your vote.
+                    </p>
+                </div>
+
+                <span class="action-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Profile -->
+            <div class="student-action-card">
+
+                <div class="student-action-icon">
+                    👨‍🎓
+                </div>
+
+                <div>
+                    <h3>My Profile</h3>
+
+                    <p>
+                        View your registered student information.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- Security -->
+            <div class="student-action-card">
+
+                <div class="student-action-icon">
+                    🔐
+                </div>
+
+                <div>
+                    <h3>Secure Voting</h3>
+
+                    <p>
+                        Your voting access is protected by your student login.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Student Information -->
+        <div class="dashboard-section-title information-title">
+            <h2>My Information</h2>
+        </div>
+
+
+        <div class="student-information-card">
+
+            <div class="student-info-item">
+                <span>Student ID</span>
+                <strong>@Model.StudentId</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Full Name</span>
+                <strong>@Model.FullName</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Email</span>
+                <strong>@Model.Email</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Department</span>
+                <strong>@Model.Department</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Account Status</span>
+
+                @if (Model.IsActive)
+                {
+                    <strong class="account-active">
+                        ● Active
+                    </strong>
+                }
+                else
+                {
+                    <strong class="account-inactive">
+                        ● Inactive
+                    </strong>
+                }
+            </div>
+
+        </div>
+
+
+        <!-- Voting Notice -->
+        <div class="student-voting-notice">
+
+            <div class="notice-icon">
+                🔒
+            </div>
+
+            <div>
+                <h3>Important Voting Information</h3>
+
+                <p>
+                    You can vote only once in each election.
+                    Please review your candidate selection carefully
+                    before submitting your vote.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Logout -->
+        <div class="student-dashboard-footer">
+
+            <a asp-controller="Student"
+               asp-action="Logout"
+               class="student-logout-button">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

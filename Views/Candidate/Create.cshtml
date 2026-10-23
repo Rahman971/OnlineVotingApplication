@@ -1,0 +1,358 @@
+﻿@using OnlineVotingApplication.Models
+
+@{
+    ViewData["Title"] = "Candidate Registration";
+
+    var student = ViewBag.Student as Student;
+    var elections = ViewBag.Elections as List<Election>;
+}
+
+<div class="candidate-create-page">
+
+    <div class="candidate-create-container">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="candidate-create-back">
+            ← Back
+        </a>
+
+        <div class="candidate-create-header">
+
+            <div>
+                <span class="candidate-create-eyebrow">
+                    STUDENT PORTAL
+                </span>
+
+                <h1>Candidate Registration</h1>
+
+                <p>
+                    Apply to contest in a college election.
+                </p>
+            </div>
+
+            <div class="candidate-create-header-icon">
+                👤
+            </div>
+
+        </div>
+
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="candidate-create-validation"
+                 style="display:block; margin-bottom:20px;">
+                @TempData["Error"]
+            </div>
+        }
+
+
+        <div class="candidate-create-card">
+
+            <div class="candidate-create-card-header">
+
+                <div class="candidate-create-icon">
+                    👤
+                </div>
+
+                <div>
+                    <h2>Student Information</h2>
+
+                    <p>
+                        These details are taken from your student account.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- STUDENT INFORMATION -->
+
+            <div class="candidate-create-form-grid">
+
+                <div class="candidate-create-field">
+
+                    <label>Full Name</label>
+
+                    <input value="@student?.FullName"
+                           class="candidate-create-input"
+                           readonly />
+
+                </div>
+
+
+                <div class="candidate-create-field">
+
+                    <label>Student ID</label>
+
+                    <input value="@student?.StudentId"
+                           class="candidate-create-input"
+                           readonly />
+
+                </div>
+
+
+                <div class="candidate-create-field">
+
+                    <label>Email</label>
+
+                    <input value="@student?.Email"
+                           class="candidate-create-input"
+                           readonly />
+
+                </div>
+
+
+                <div class="candidate-create-field">
+
+                    <label>Phone</label>
+
+                    <input value="@student?.PhoneNumber"
+                           class="candidate-create-input"
+                           readonly />
+
+                </div>
+
+
+                <div class="candidate-create-field">
+
+                    <label>Department</label>
+
+                    <input value="@student?.Department"
+                           class="candidate-create-input"
+                           readonly />
+
+                </div>
+
+
+                <div class="candidate-create-field">
+
+                    <label>Year</label>
+
+                    <input value="@student?.Year"
+                           class="candidate-create-input"
+                           readonly />
+
+                </div>
+
+            </div>
+
+
+            <!-- APPLICATION FORM -->
+
+            <div class="candidate-create-card-header"
+                 style="margin-top:35px;">
+
+                <div class="candidate-create-icon">
+                    📝
+                </div>
+
+                <div>
+                    <h2>Election Application</h2>
+
+                    <p>
+                        Select the election and position you want to contest.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form asp-controller="Candidate"
+                  asp-action="Create"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+
+                <div class="candidate-create-form-grid">
+
+
+                    <!-- ELECTION -->
+
+                    <div class="candidate-create-field candidate-create-full">
+
+                        <label for="electionId">
+                            Election <span>*</span>
+                        </label>
+
+                        <select id="electionId"
+                                name="electionId"
+                                class="candidate-create-input"
+                                required>
+
+                            <option value="">
+                                Select an election
+                            </option>
+
+                            @if (elections != null && elections.Any())
+                            {
+                                foreach (var election in elections)
+                                {
+                                    <option value="@election.Id">
+                                        @election.ElectionName
+                                    </option>
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- POSITION -->
+
+                    <div class="candidate-create-field candidate-create-full">
+
+                        <label for="position">
+                            Contesting Position <span>*</span>
+                        </label>
+
+                        <select id="position"
+                                name="position"
+                                class="candidate-create-input"
+                                required>
+
+                            <option value="">
+                                Select a position
+                            </option>
+
+                            <option value="President">
+                                President
+                            </option>
+
+                            <option value="Vice President">
+                                Vice President
+                            </option>
+
+                            <option value="Secretary">
+                                Secretary
+                            </option>
+
+                            <option value="Joint Secretary">
+                                Joint Secretary
+                            </option>
+
+                            <option value="Treasurer">
+                                Treasurer
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- MANIFESTO -->
+
+                    <div class="candidate-create-field candidate-create-full">
+
+                        <label for="candidateDetails">
+                            Manifesto / About Candidate
+                        </label>
+
+                        <textarea id="candidateDetails"
+                                  name="candidateDetails"
+                                  class="candidate-create-input candidate-create-textarea"
+                                  rows="5"
+                                  maxlength="2000"
+                                  placeholder="Tell students about your goals, responsibilities and plans..."></textarea>
+
+                        <small>
+                            Maximum 2000 characters.
+                        </small>
+
+                    </div>
+
+
+                    <!-- PHOTO -->
+
+                    <div class="candidate-create-field candidate-create-full">
+
+                        <label>
+                            Candidate Photo
+                        </label>
+
+                        <div class="candidate-photo-upload">
+
+                            <div class="candidate-photo-upload-icon">
+                                📷
+                            </div>
+
+                            <div class="candidate-photo-upload-content">
+
+                                <strong>
+                                    Upload candidate photo
+                                </strong>
+
+                                <span>
+                                    JPG, JPEG, PNG or WEBP • Maximum 2 MB
+                                </span>
+
+                                <input type="file"
+                                       name="photoFile"
+                                       class="candidate-photo-input"
+                                       accept=".jpg,.jpeg,.png,.webp" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- APPROVAL NOTICE -->
+
+                <div class="candidate-approval-note">
+
+                    <div class="candidate-approval-icon">
+                        🔒
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Admin Approval Required
+                        </strong>
+
+                        <p>
+                            Your application will remain
+                            <strong>Pending</strong> until the
+                            election administrator reviews and approves it.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="candidate-create-actions">
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="candidate-cancel-button">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="candidate-submit-button">
+
+                        Submit Application
+
+                        <span>→</span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

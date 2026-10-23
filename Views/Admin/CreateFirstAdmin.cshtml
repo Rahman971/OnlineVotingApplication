@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Create Admin";
+}
+
+<div class="admin-login-page">
+
+    <div class="admin-login-card">
+
+        <div class="admin-login-icon">
+            🛡️
+        </div>
+
+        <h1>Create Admin</h1>
+
+        <p class="admin-subtitle">
+            Initial Administrator Setup
+        </p>
+
+        <div class="college-name">
+            THULASI COLLEGE OF ARTS AND SCIENCE FOR WOMEN
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="admin-error">
+                @ViewBag.Error
+            </div>
+        }
+
+        <form asp-controller="Admin"
+              asp-action="CreateFirstAdmin"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <!-- Username -->
+            <div class="admin-form-group">
+                <label for="username">Username</label>
+                <input type="text"
+                       id="username"
+                       name="username"
+                       placeholder="Create admin username"
+                       autocomplete="username"
+                       required />
+            </div>
+
+            <!-- Full Name -->
+            <div class="admin-form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text"
+                       id="fullName"
+                       name="fullName"
+                       placeholder="Enter administrator name"
+                       required />
+            </div>
+
+            <!-- Email -->
+            <div class="admin-form-group">
+                <label for="email">Email Address</label>
+                <input type="email"
+                       id="email"
+                       name="email"
+                       placeholder="Enter administrator email"
+                       autocomplete="email"
+                       required />
+            </div>
+
+            <!-- Password -->
+            <div class="admin-form-group">
+                <label for="password">Password</label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       placeholder="Create secure password"
+                       autocomplete="new-password"
+                       minlength="8"
+                       required />
+            </div>
+
+            <button type="submit"
+                    class="admin-login-btn">
+                Create Administrator
+                <span>→</span>
+            </button>
+
+        </form>
+
+        <div class="admin-security">
+            🔒 Authorized Administrator Setup
+        </div>
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="admin-back">
+            ← Back to Home
+        </a>
+
+    </div>
+
+</div>
